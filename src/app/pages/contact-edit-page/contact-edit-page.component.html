@@ -1,0 +1,20 @@
+<section class="contact-edit">
+    <div class="contact-preview" *ngIf="contact">
+      <span class="title">Name</span>
+      <span class="val">{{ contact.name }}</span>
+      <span class="title">Email</span>
+      <span class="val">{{ contact.email }}</span>
+      <span class="title">Phone number</span>
+      <span class="val">{{ contact.phone }}</span>
+    </div>
+    <form (ngSubmit)="onSaveContact()">
+      <label for="name">Name:</label>
+      <input name="name" type="text" [(ngModel)]="contact.name" />
+      <label for="email">Email:</label>
+      <input name="email" type="text" [(ngModel)]="contact.email" />
+      <label for="phone">Phone:</label>
+      <input name="phone" type="text" [(ngModel)]="contact.phone" />
+      <button class="save-btn">Save</button>
+    </form>
+    <button class="back-btn" routerLink="/contact">Back</button>
+</section>

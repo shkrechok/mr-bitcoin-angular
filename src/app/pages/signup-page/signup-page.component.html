@@ -1,0 +1,13 @@
+<section class="login-container">
+    <h1>Receive 100 coims to your account with every signup !!!</h1>
+    <h1>Login or SignUp</h1>
+    
+    <form  (ngSubmit)="onLogin()" >
+      <input [(ngModel)]="user.name" type="text"  placeholder="username" />
+      <button>Login</button>
+    </form>
+    <!-- <form @submit.prevent="signup" key="signup">
+        <input type="text" v-model="user.username" placeholder="username" />
+        <button>SignUp</button>
+    </form> -->
+</section>

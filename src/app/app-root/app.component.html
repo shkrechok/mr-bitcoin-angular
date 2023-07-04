@@ -1,0 +1,25 @@
+<section class="app-container main-layout">
+  <header class="app-header full main-layout">
+    <div class="header-central">
+    <section class="user-data" >
+        <p>Hello {{ loggedInUser.name }} </p>
+        <p>Bitcoin rate: {{ bitCoinRate }} </p>
+    </section>
+    <button class="logout-btn" *ngIf="loggedInUser" (click)="onLogout()">Logout</button>
+    <nav>
+      <a routerLink="home" class="link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" >Home</a>
+        <a routerLink="contact" class="link" routerLinkActive="active" >Contacts</a>
+        <a routerLink="statistics" class="link" routerLinkActive="active" >Statistic</a>
+    
+    </nav>
+    </div>
+</header>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="app-footer full">
+    <p>© Coffeerights 2023</p>
+</footer>
+
+</section>

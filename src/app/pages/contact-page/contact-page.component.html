@@ -1,0 +1,46 @@
+<section class="contact-page">
+  <section class="contacts-header">
+    <button routerLink="/contact/edit" class="add-btn">Add Contact</button>
+    <form class="filter">
+        <input
+          type="text"
+          placeholder="Search contact"
+          [(ngModel)]="contactFilter.term" 
+          (ngModelChange)="onSetFilter($event)"
+           name="term"
+        />
+        <select name="filterBy" type="text" [(ngModel)]="contactFilter.filterBy" (ngModelChange)="onSetFilter($event)">
+          <option value="name">Name</option>
+          <option value="phone">Phone</option>
+          <option value="email">Email</option>
+        </select >
+    </form>
+    </section>
+    <contact-list [contacts]="contacts$ | async" (deleteContact)="onDeleteContact($event)"></contact-list>
+  </section>
+
+  <!-- <div class="contacts">
+    <section class="contacts-header">
+      <button class="add-btn">
+        <RouterLink to="/contact/edit">Add Contact</RouterLink>
+      </button>
+      <div class="filter">
+        <input
+          type="text"
+          placeholder="Search contact"
+          v-model="filterBy.term"
+        />
+        <select v-model="filterBy.filterBy">
+          <option value="name">Name</option>
+          <option value="phone">Phone</option>
+          <option value="email">Email</option>
+        </select>
+      </div>
+    </section>
+    <ContactList
+      :contacts="filteredContacts"
+      @delete="onDeleteContact"
+      v-if="contacts"
+    />
+  </div>
+</section> -->

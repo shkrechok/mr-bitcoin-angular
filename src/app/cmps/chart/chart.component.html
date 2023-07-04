@@ -1,0 +1,9 @@
+<section class="chart-area">
+<div class="chart-container" >
+<ngx-charts-bar-vertical [view]="[1000, 400]" [results]="trades$|async" [xAxisLabel]="'USD Exchange Trade Volume'"
+    [legendTitle]="'Day'" [yAxisLabel]="'Trade Volume (USD)'" [legend]="true" [showXAxisLabel]="true"
+    [showYAxisLabel]="true" [xAxis]="true" [yAxis]="true" [gradient]="true">
+</ngx-charts-bar-vertical>
+</div>
+</section>
+  
