@@ -117,7 +117,11 @@ export class ContactService {
   }
 
   private _addContact(contact: Contact) {
-    const newContact = new Contact(contact.name,  contact.phone, contact.email, );
+    const newContact = new Contact();
+    console.log('newContact:', newContact);
+    newContact.name = contact.name;
+    newContact.email = contact.email || '';
+    newContact.phone = contact.phone || '';
     if (typeof newContact.setId === 'function')
       newContact.setId(this._getRandomId());
     return from(storageService.post(ENTITY, newContact)).pipe(

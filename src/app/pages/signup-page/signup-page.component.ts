@@ -11,15 +11,17 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class SignupPageComponent {
         
-    user: User ={
+    user: User = {
       name: '',
-    } 
-  
+      coins: 100,
+      moves: []
+    }
     constructor(private userService: UserService, private router: Router) { }
   
     onLogin() {
       this.userService.login(this.user.name)
         .subscribe(user => {
+          this.user = user as User
           this.router.navigateByUrl('/home')
         })
     }

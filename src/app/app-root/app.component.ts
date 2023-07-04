@@ -19,8 +19,9 @@ export class AppComponent implements  OnInit{
     private router: Router
     ) {}
   bitCoinRate: number = 0;
-  loggedInUser: any = null;
-  
+  loggedInUser: User | null = null;
+  nameToDisplay: string = 'Guest';
+
    ngOnInit(): void {
     this.contactService.loadContacts().pipe(take(1)).subscribe({
         error: err => {
@@ -34,7 +35,8 @@ export class AppComponent implements  OnInit{
     })
     this.userService.loggedInUser$.subscribe({
       next: user => {
-        this.loggedInUser = user as User
+        this.loggedInUser = user
+        if (user) this.nameToDisplay = user.name as string
       }
     })
 }

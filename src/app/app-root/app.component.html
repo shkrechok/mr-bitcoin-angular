@@ -2,7 +2,7 @@
   <header class="app-header full main-layout">
     <div class="header-central">
     <section class="user-data" >
-        <p>Hello {{ loggedInUser.name }} </p>
+        <p>Hello  {{ nameToDisplay }}</p>
         <p>Bitcoin rate: {{ bitCoinRate }} </p>
     </section>
     <button class="logout-btn" *ngIf="loggedInUser" (click)="onLogout()">Logout</button>
