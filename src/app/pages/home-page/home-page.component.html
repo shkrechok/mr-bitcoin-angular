@@ -1,1 +1,13 @@
-<p>home works!</p>
+<div class="home">
+  <section class="transactions">
+    <pre>{{ loggedInUser.moves }}</pre>
+  </section>
+  <section class="basic-data-ctn" *ngIf="loggedInUser" >
+    <span class="title">Your name</span>
+    <span class="val">{{ loggedInUser.name }}</span>
+    <span class="title">Your balance</span>
+    <span class="val">{{ loggedInUser.coins }}</span>
+    <span class="title">Bit coin rate</span>
+    <span class="val" v-if="bitcoinRate">{{ bitCoinRate }}</span>
+  </section>
+</div>
