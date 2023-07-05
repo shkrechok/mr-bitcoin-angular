@@ -1,0 +1,13 @@
+<section class="move-list">
+    <h2>Move list</h2>
+    <ul class="move-list">
+      <li *ngFor="let move of moves">
+        <article class="move-preview" *ngIf="move">
+            <span *ngIf="move.to"><span class="title">To:</span> {{move.to}}</span>
+            <span *ngIf="move.from"><span class="title">From:</span> {{move.from}}</span>
+            <span><span class="title">At:</span> {{move.at | date: 'MMM d, y'}}</span>
+            <span><span class="title">Amount:</span> {{move.amount}} coins</span>
+        </article>
+      </li>
+    </ul>
+  </section>

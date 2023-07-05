@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { Observable, switchMap, Subscription } from 'rxjs';
+import { Move } from '../../models/user.model';
 
 @Component({
   selector: 'home',
@@ -20,9 +21,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private router: Router
     ) {}
   bitCoinRate: number = 0;
-  // loggedInUser$: Observable<User> = this.userService.loggedInUser$;
+  loggedInUser$: Observable<User> = this.userService.loggedInUser$;
   loggedInUser!: User ;
   subscription!: Subscription;
+  moves!: Move[];
 
    ngOnInit(): void {
     
@@ -31,6 +33,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
         this.bitCoinRate = +rate
       }
     })
+
     this.userService.loggedInUser$.subscribe({
       next: user => {
         this.loggedInUser = user
@@ -39,9 +42,12 @@ export class HomePageComponent implements OnInit, OnDestroy {
    this.contactService.getContactById(this.loggedInUser._id as string).subscribe({
       next: user => {
         this.loggedInUser = user
+        console.log('this.loggedInUser:', this.loggedInUser)
+        this.moves = this.loggedInUser.moves?.slice(-3) as Move[]
       }
     })
-
+   
+    
     
 }
   ngOnDestroy(): void {

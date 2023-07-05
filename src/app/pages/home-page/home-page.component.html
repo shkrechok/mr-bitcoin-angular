@@ -1,7 +1,5 @@
 <div class="home">
-  <section class="transactions">
-    <pre>{{ loggedInUser.moves }}</pre>
-  </section>
+  
   <section class="basic-data-ctn" *ngIf="loggedInUser" >
     <span class="title">Your name</span>
     <span class="val">{{ loggedInUser.name }}</span>
@@ -9,5 +7,9 @@
     <span class="val">{{ loggedInUser.coins }}</span>
     <span class="title">Bit coin rate</span>
     <span class="val" v-if="bitcoinRate">{{ bitCoinRate }}</span>
+  </section>
+  <section class="transactions">
+    <move-list *ngIf="loggedInUser.moves" [moves]="moves"></move-list>
+    <!-- <pre>{{ loggedInUser.moves }}</pre> -->
   </section>
 </div>

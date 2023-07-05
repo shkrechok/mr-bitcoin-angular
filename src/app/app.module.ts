@@ -15,7 +15,11 @@ import { FormsModule } from '@angular/forms';
 import { ChartComponent } from './cmps/chart/chart.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SignupPageComponent } from './pages/signup-page/signup-page.component'
+import { SignupPageComponent } from './pages/signup-page/signup-page.component';
+import { TransferFundsComponent } from './cmps/transfer-funds/transfer-funds.component'
+import { Subscription } from 'rxjs';
+import { UserService } from './services/user.service';
+import { MoveListComponent } from './cmps/move-list/move-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +32,8 @@ import { SignupPageComponent } from './pages/signup-page/signup-page.component'
     StatisticsPageComponent,
     ChartComponent,
     SignupPageComponent,
+    TransferFundsComponent,
+    MoveListComponent,
     
   ],
   imports: [
@@ -38,7 +44,7 @@ import { SignupPageComponent } from './pages/signup-page/signup-page.component'
     NgxChartsModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

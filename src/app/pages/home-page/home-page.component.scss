@@ -1,8 +1,14 @@
 @import '../../../styles.scss';
+
+:host{
+    height: 100%;
+    width: 100%;
+}
 .home {
     display: grid;
     align-items: center;
     justify-content: center;
+    gap: 2rem;
     .basic-data-ctn {
       display: grid;
       grid-template-columns: 1fr 1fr;

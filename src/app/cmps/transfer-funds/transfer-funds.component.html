@@ -1,0 +1,12 @@
+<div class="transfer-funds">
+    <h1>Transfer Funds</h1>
+    <form (ngSubmit)="onTransferFunds()" >
+        <label for="amount">Amount</label>
+        <input type="number"[(ngModel)]="amount" name="amount" id="amount" placeholder="Amount" />
+        <label for="to">To</label>
+        <span class="to">{{contact.name}}</span> 
+        <button>Transfer</button>
+    </form>
+    <button class="cancel-btn" (click)="onCloseTransfer()">Cancel</button>
+
+</div>

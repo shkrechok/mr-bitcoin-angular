@@ -1,7 +1,4 @@
 <section class="contact-details" *ngIf="contact$ | async as contact">
-    <section class="from me" >
-      <pre>{{ contact.moves }}</pre>
-    </section>
     <section class="contact-preview">
       <span class="title">Name</span>
       <span class="val">{{ contact.name }}</span>
@@ -11,8 +8,9 @@
       <span class="val">{{ contact.phone }}</span>
     </section>
     <section class="actions">
-    <button class="transfer-btn" title="transfer funds" >Transfer</button>
+    <button class="transfer-btn" title="transfer funds" (click)="onToggleTransfer()" >Transfer</button>
     <button class="back-btn" (click)="onBack()">Back</button>
     </section>
-    <!-- <TransferFunds v-if="isTransfer" :contact="contact" @closeTransfer="closeTransfer" /> -->
+    <transfer-funds *ngIf="isTransfer" [contact]="contact" (transferFunds)="onTransferFunds($event)" (closeTransfer)="closeTransfer()"  ></transfer-funds>
+    <move-list *ngIf="contact.moves" [moves]="moves"></move-list>
 </section>

@@ -1,4 +1,4 @@
-
+import { Move } from './user.model';
 export class Contact {
 
     constructor(
@@ -7,7 +7,8 @@ export class Contact {
         public email?: string,
         public phone?: string,
         public imgUrl?: string,
-        public moves?: []) {
+        public moves?: Move[],
+        public coins?: number,) {
 
     }
 
