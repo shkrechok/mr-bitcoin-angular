@@ -18,5 +18,5 @@ export interface Move {
   from?: string,
   to?: string,
   at: number,
-  amount: number
+  amount?: number
 }

@@ -7,13 +7,13 @@ import { ContactEditPageComponent } from './pages/contact-edit-page/contact-edit
 import { StatisticsPageComponent } from './pages/statistics-page/statistics-page.component';
 import { contactResolver } from './resolvers/contact-resolver';
 import { SignupPageComponent } from './pages/signup-page/signup-page.component';
-
+import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
-  { path: 'contact', component: ContactPageComponent },
+  { path: 'contact', component: ContactPageComponent,canActivate: [AuthGuard], data: {isAuth: false} },
   { path: 'contact/edit/:id', component: ContactEditPageComponent, resolve: { contact: contactResolver } },
   { path: 'contact/edit', component: ContactEditPageComponent},
   { path: 'contact/:id', component: ContactDetailsPageComponent, resolve: { contact: contactResolver } },
-  { path: 'home', component: HomePageComponent },
+  { path: 'home', component: HomePageComponent , canActivate: [AuthGuard], data: {isAuth: false}},
   { path: 'signup', component: SignupPageComponent },
   { path: '', redirectTo: 'signup', pathMatch: 'full' },
   { path: 'statistics', component: StatisticsPageComponent },

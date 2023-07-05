@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
+import { Injectable, signal } from '@angular/core';
+import { Move, User } from '../models/user.model';
 import {
   Observable,
   BehaviorSubject,
@@ -25,7 +25,7 @@ const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser';
   providedIn: 'root',
 })
 export class UserService {
-  private _loggedInUser$ = new BehaviorSubject<User>({});
+  private _loggedInUser$ = new BehaviorSubject<User>({}) || null;
   public loggedInUser$ = this._loggedInUser$.asObservable() || null;
 
   
@@ -33,21 +33,16 @@ export class UserService {
     private contactService: ContactService,
   ) {
     
-    const loggedinUser = JSON.parse(
+    let loggedinUser = JSON.parse(
       sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER) || 'null'
-    );
+    ) as User || null;
     if (loggedinUser) this._loggedInUser$.next(loggedinUser);
-  }
+  } 
 
-  user = {
-    name: 'Ochoa Hyde',
-    coins: 100,
-    moves: [],
-  };
   //   private _loggedInUser$ = new BehaviorSubject(this.user)
 
   getLoggedInUser() {
-    return this._loggedInUser$.value;
+    return this._loggedInUser$.value ? this._loggedInUser$.value.name : null;
   }
 
   signup(name: any) {
@@ -81,7 +76,7 @@ export class UserService {
 
   logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER);
-    this._loggedInUser$.next({ name: '' });
+    this._loggedInUser$.next(null as any);
   }
 
   makeId(length = 5) {
@@ -99,9 +94,9 @@ export class UserService {
   }
 
   transferFunds(contact: Contact, amount: number) {
-    const loggedInUser = this.getLoggedInUser();
-  
-    this.contactService.getContactById(loggedInUser._id as string).pipe(
+    const loggedInUser = this.getLoggedInUser() as User;
+    if (loggedInUser) {
+    this.contactService.getContactById(loggedInUser._id as string ).pipe(
       switchMap((user) => {
         if (!user.coins || user.coins < amount) {
           throw new Error('Not enough coins');
@@ -119,7 +114,8 @@ export class UserService {
           at: Date.now(),
           amount,
         });
-  
+        
+        
         return this.contactService.saveContact(user);
       }),
       switchMap(() => {
@@ -141,19 +137,19 @@ export class UserService {
           at: Date.now(),
           amount,
         });
-  
+        
         return this.contactService.saveContact(contact);
       })
     ).subscribe({
-        next: (user) => {
+        next: () => {
+
             console.log('Transfer complete');
-            return user.moves;
-          
+            
         },
         error: (error) => {
             console.log('Transfer failed', error);
         }
-      });
+      });}
   }
 
 

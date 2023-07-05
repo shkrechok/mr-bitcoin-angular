@@ -36,13 +36,18 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     this.userService.loggedInUser$.subscribe({
       next: user => {
+        if (user)
         this.loggedInUser = user
+        else {
+          this.router.navigateByUrl('/signup')
+        }
       }
     })
    this.contactService.getContactById(this.loggedInUser._id as string).subscribe({
       next: user => {
         this.loggedInUser = user
         console.log('this.loggedInUser:', this.loggedInUser)
+        if (this.loggedInUser.moves)
         this.moves = this.loggedInUser.moves?.slice(-3) as Move[]
       }
     })

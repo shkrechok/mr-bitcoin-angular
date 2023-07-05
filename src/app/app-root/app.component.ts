@@ -33,17 +33,28 @@ export class AppComponent implements  OnInit{
         this.bitCoinRate = +rate
       }
     })
+
+    // this.loggedInUser = this.userService.getLoggedInUser() as User | null
+    // if (this.loggedInUser){
+    //   this.nameToDisplay = this.loggedInUser.name as string
+    // }
     this.userService.loggedInUser$.subscribe({
       next: user => {
+        if (user && user.name){
         this.loggedInUser = user
-        if (user) this.nameToDisplay = user.name as string
+        this.nameToDisplay = user.name as string
+        }else {
+          this.nameToDisplay = 'Guest'
+          this.router.navigateByUrl('/signup')
+        }
       }
     })
+    
 }
 
    onLogout() {
     this.userService.logout()
     this.loggedInUser = null
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('/signup')
    }
 }

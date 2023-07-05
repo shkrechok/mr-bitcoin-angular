@@ -12,5 +12,5 @@
     <button class="back-btn" (click)="onBack()">Back</button>
     </section>
     <transfer-funds *ngIf="isTransfer" [contact]="contact" (transferFunds)="onTransferFunds($event)" (closeTransfer)="closeTransfer()"  ></transfer-funds>
-    <move-list *ngIf="contact.moves" [moves]="moves"></move-list>
+    <move-list *ngIf="moves && moves.length" [moves]="moves"></move-list>
 </section>

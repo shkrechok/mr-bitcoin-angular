@@ -9,6 +9,7 @@ import {
   Output,
   inject,
   AfterViewInit,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,7 +21,6 @@ import {
   map,
   switchMap,
   filter,
- 
 } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -49,46 +49,44 @@ export class ContactDetailsPageComponent implements OnInit, AfterViewInit {
   loggedInUser$ = this.userService.loggedInUser$;
   loggedInUser!: Contact;
 
-  ngOnInit(): void {
-    this.contact$ = this.route.data.pipe(
-      map( data => data['contact'])
-      
-    )
-    this.loggedInUser$.subscribe(user => {
-      this.loggedInUser = user
-    }
-    )
-    this.contact$.subscribe(contact => {
-      this.contact = contact
-      this.moves = this.contact.moves?.filter(move => move.toId === this.loggedInUser._id || move.fromId === this.loggedInUser._id) as Move[]
+  
+  
 
-      this.moves = this.moves?.slice(-3) as Move[]
-    }
-    )
+  ngOnInit(): void {
+    this.contact$ = this.route.data.pipe(map((data) => data['contact']));
+    this.loggedInUser$.subscribe((user) => {
+      this.loggedInUser = user;
+    });
     
+    this.contact$.subscribe((contact) => {
+      this.contact = contact;
+      
+      this.moves = this.contact.moves?.filter(
+        (move) =>
+          move.toId === this.loggedInUser._id ||
+          move.fromId === this.loggedInUser._id
+      ) as Move[];
+
+      this.moves = this.moves?.slice(-3) as Move[];
+    });
   }
 
   ngAfterViewInit(): void {}
-    
-  onBack() {
-    this.router.navigateByUrl('/contact')
-    
-}
-onToggleTransfer() {
-  this.isTransfer = !this.isTransfer
-}
-closeTransfer() {
-  this.isTransfer = false
-}
- onTransferFunds(amount: number) {
-  this.userService
-    .transferFunds(this.contact, amount)
-    
-    
-    this.isTransfer = false
-  }
-// ngOnDestroy(): void {
-//   this.subscription?.unsubscribe()
-// }
-}
 
+  onBack() {
+    this.router.navigateByUrl('/contact');
+  }
+  onToggleTransfer() {
+    this.isTransfer = !this.isTransfer;
+  }
+  closeTransfer() {
+    this.isTransfer = false;
+  }
+  onTransferFunds(amount: number) {
+    this.userService.transferFunds(this.contact, amount)
+    this.isTransfer = false;
+  }
+  // ngOnDestroy(): void {
+  //   this.subscription?.unsubscribe()
+  // }
+}
