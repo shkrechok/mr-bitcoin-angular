@@ -15,6 +15,10 @@
       width: $btnwidth2;
       @include unified-button-style;
     }
+
+    .back-btn {
+      justify-self: end;
+    }
   
     .contact-preview {
       gap: $commonMarginPadding;
