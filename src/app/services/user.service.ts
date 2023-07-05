@@ -145,8 +145,10 @@ export class UserService {
         return this.contactService.saveContact(contact);
       })
     ).subscribe({
-        next: () => {
-          console.log('Transfer complete');
+        next: (user) => {
+            console.log('Transfer complete');
+            return user.moves;
+          
         },
         error: (error) => {
             console.log('Transfer failed', error);
