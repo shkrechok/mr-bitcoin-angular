@@ -1,26 +1,15 @@
 import { Location } from '@angular/common';
 import {
   Component,
-  DestroyRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
   OnInit,
-  Output,
-  inject,
   AfterViewInit,
-  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Observable,
   Subscription,
-  catchError,
-  lastValueFrom,
   map,
-  switchMap,
-  filter,
 } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
@@ -60,7 +49,7 @@ export class ContactDetailsPageComponent implements OnInit, AfterViewInit {
     
     this.contact$.subscribe((contact) => {
       this.contact = contact;
-      
+      console.log('user: ',this.loggedInUser,'contact: ',this.contact)
       this.moves = this.contact.moves?.filter(
         (move) =>
           move.toId === this.loggedInUser._id ||
@@ -83,8 +72,25 @@ export class ContactDetailsPageComponent implements OnInit, AfterViewInit {
     this.isTransfer = false;
   }
   onTransferFunds(amount: number) {
-    this.userService.transferFunds(this.contact, amount)
+    this.userService.transferFunds(this.contact, amount).subscribe((updatedContact) => {
+      this.contact = updatedContact;
+      this.moves = this.contact.moves?.filter(
+        (move) =>
+          move.toId === this.loggedInUser._id ||
+          move.fromId === this.loggedInUser._id
+      ) as Move[];
+
+      this.moves = this.moves?.slice(-3) as Move[];
+    });
+
     this.isTransfer = false;
+    
+   
+      
+      
+  
+  
+
   }
   // ngOnDestroy(): void {
   //   this.subscription?.unsubscribe()

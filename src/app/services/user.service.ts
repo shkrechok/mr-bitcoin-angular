@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Move, User } from '../models/user.model';
 import {
   Observable,
@@ -9,13 +9,13 @@ import {
   retry,
   catchError,
   filter,
-  switchMap
+  switchMap,
+  concatMap
 } from 'rxjs';
 import { storageService } from './async-storage.service';
 import { Contact } from '../models/contact.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ContactService } from './contact.service';
-import { Subscription } from 'rxjs';
 
 const USER_DB = 'contacts';
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser';
@@ -42,7 +42,7 @@ export class UserService {
   //   private _loggedInUser$ = new BehaviorSubject(this.user)
 
   getLoggedInUser() {
-    return this._loggedInUser$.value ? this._loggedInUser$.value.name : null;
+    return this._loggedInUser$.value ? this._loggedInUser$.value : null;
   }
 
   signup(name: any) {
@@ -93,20 +93,82 @@ export class UserService {
     return throwError(() => err);
   }
 
-  transferFunds(contact: Contact, amount: number) {
-    const loggedInUser = this.getLoggedInUser() as User;
-    if (loggedInUser) {
-    this.contactService.getContactById(loggedInUser._id as string ).pipe(
-      switchMap((user) => {
+//  transferFunds(contact: Contact, amount: number) {
+//     const loggedInUser = this.getLoggedInUser() as User;
+//     console.log('logged user: ',loggedInUser,'contact: ', contact)
+    
+//     if (loggedInUser) {
+//     this.contactService.getContactById(loggedInUser._id as string ).pipe(
+//       concatMap((user) => {
+//         if (!user.coins || user.coins < amount) {
+//           throw new Error('Not enough coins');
+//         }
+  
+//         user.coins -= amount;
+//         if (!user.moves) {
+//           user.moves = [];
+//         }
+  
+//         user.moves.push({
+//           _id: this.makeId(),
+//           toId: contact._id as string,
+//           to: contact.name as string,
+//           at: Date.now(),
+//           amount,
+//         });
+        
+        
+//        return this.contactService.saveContact(user);
+        
+//       }),
+//       concatMap(() => {
+//         return this.contactService.getContactById(contact._id as string);
+//       }),
+//       concatMap((contact) => {
+//         if (!contact.coins) {
+//           contact.coins = 0;
+//         }
+//         contact.coins += amount;
+//         if (!contact.moves) {
+//           contact.moves = [];
+//         }
+  
+//         contact.moves.push({
+//           _id: this.makeId(),
+//           fromId: loggedInUser._id as string,
+//           from: loggedInUser.name,
+//           at: Date.now(),
+//           amount,
+//         });
+        
+//         return this.contactService.saveContact(contact);
+//       })
+//     ).subscribe({
+//         next: (contact) => {
+//             console.log('Transfer complete');
+//             return contact;
+            
+//         },
+//         error: (error) => {
+//             console.log('Transfer failed', error);
+//         }
+//       });}
+//   }
+transferFunds(contact: Contact, amount: number): Observable<Contact> {
+  const loggedInUser = this.getLoggedInUser() as User;
+
+  if (loggedInUser) {
+    return this.contactService.getContactById(loggedInUser._id as string).pipe(
+      concatMap((user) => {
         if (!user.coins || user.coins < amount) {
           throw new Error('Not enough coins');
         }
-  
+
         user.coins -= amount;
         if (!user.moves) {
           user.moves = [];
         }
-  
+
         user.moves.push({
           _id: this.makeId(),
           toId: contact._id as string,
@@ -114,43 +176,45 @@ export class UserService {
           at: Date.now(),
           amount,
         });
-        
-        
-        return this.contactService.saveContact(user);
-      }),
-      switchMap(() => {
-        return this.contactService.getContactById(contact._id as string);
-      }),
-      switchMap((contact) => {
-        if (!contact.coins) {
-          contact.coins = 0;
-        }
-        contact.coins += amount;
-        if (!contact.moves) {
-          contact.moves = [];
-        }
-  
-        contact.moves.push({
-          _id: this.makeId(),
-          fromId: loggedInUser._id as string,
-          from: loggedInUser.name,
-          at: Date.now(),
-          amount,
-        });
-        
-        return this.contactService.saveContact(contact);
-      })
-    ).subscribe({
-        next: () => {
 
-            console.log('Transfer complete');
-            
-        },
-        error: (error) => {
-            console.log('Transfer failed', error);
-        }
-      });}
+        return this.contactService.saveContact(user).pipe(
+          concatMap(() => {
+            return this.contactService.getContactById(contact._id as string);
+          }),
+          concatMap((updatedContact) => {
+            if (!updatedContact.coins) {
+              updatedContact.coins = 0;
+            }
+            updatedContact.coins += amount;
+            if (!updatedContact.moves) {
+              updatedContact.moves = [];
+            }
+
+            updatedContact.moves.push({
+              _id: this.makeId(),
+              fromId: loggedInUser._id as string,
+              from: loggedInUser.name,
+              at: Date.now(),
+              amount,
+            });
+
+            return this.contactService.saveContact(updatedContact);
+          })
+        );
+      })
+    );
+  } else {
+    console.log('User not logged in');
+    return throwError('User not logged in');
   }
+}
+
+
+
+
+
+
+
 
 
 }
