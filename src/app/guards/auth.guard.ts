@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
         state: RouterStateSnapshot): boolean {
 
         const user = this.userService.getLoggedInUser()
-        if (user) return true
+        if (user?.name) return true
         else {
             this.router.navigateByUrl('/signup')
             return false
